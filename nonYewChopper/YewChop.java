@@ -7,10 +7,10 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import nonYewChopper.Utilites.TesterInter;
-import nonYewChopper.Utilites.Utilis;
-import nonYewChopper.Workers.Gui;
-import nonYewChopper.Workers.StatGui;
+import nonYewChopper.utilites.TesterInterface;
+import nonYewChopper.utilites.Utilis;
+import nonYewChopper.workers.Gui;
+import nonYewChopper.workers.StatGui;
 
 import org.powerbot.event.MessageEvent;
 import org.powerbot.event.MessageListener;
@@ -33,13 +33,11 @@ public class YewChop extends PollingScript implements MessageListener, PaintList
 	private Gui gui;
 	Rectangle open = new Rectangle(24, 113, 165, 20);
 	private YewChop chop = this;
-	private double expAmount;
-	private TesterInter tester;
+	private TesterInterface tester;
 	private int startExp;
 	private int yewPrice;
 	private boolean scriptRun;
-	public static int logsCut;
-	public static String status = "";
+	private int logsCut;
 	public static GameObject curTree;
 	
 	public YewChop() {
@@ -82,7 +80,7 @@ public class YewChop extends PollingScript implements MessageListener, PaintList
 	
 	@Override
 	public void messaged(MessageEvent h) {
-		tester.decideMessage(h.getMessage().toString().toLowerCase());
+		tester.decideMessage(h.getMessage().toString().toLowerCase(), chop);
 
 	}
 
@@ -95,7 +93,7 @@ public class YewChop extends PollingScript implements MessageListener, PaintList
 		g.drawString("CLICK HERE FOR RUN INFO", 26, 128);
 		d.setPaint(Color.WHITE);
 		g.drawString("Current Yew Price: " + Integer.toString(yewPrice), 24, 95);
-		g.drawString("General Status: " + status, 24, 108);
+		g.drawString("General Status: " + tester.getStatus(), 24, 108);
 		if(curTree != null){
 			curTree.getLocation().getMatrix(ctx).draw(g, 100);
 		}
@@ -103,10 +101,9 @@ public class YewChop extends PollingScript implements MessageListener, PaintList
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(open.contains(e.getPoint())){
-			StatGui.getInstance(startTime, expAmount, startExp, yewPrice).go(ctx.skills.getExperienceAt(ctx.skills.getLevel(Skills.WOODCUTTING) + 1));
+		if(scriptRun && open.contains(e.getPoint())){
+			StatGui.getInstance().go(ctx.skills.getExperienceAt(ctx.skills.getLevel(Skills.WOODCUTTING) + 1));
 		}
-		
 	}
 
 	@Override
@@ -133,10 +130,18 @@ public class YewChop extends PollingScript implements MessageListener, PaintList
 		
 	}
 	
-	public void deleteGui(final double i, final TesterInter t){
-		this.expAmount = i;
+	public void deleteGui(final double treeExp, final TesterInterface t){
 		this.tester = t;
+		StatGui.createInstance(startTime, treeExp, startExp, yewPrice, chop);
 		this.gui = null;
 		scriptRun = true;
+	}
+	
+	public int getLogsCut(){
+		return logsCut;
+	}
+	
+	public void setLogsCut(int logsCut){
+		this.logsCut = logsCut;
 	}
 }

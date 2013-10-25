@@ -2,27 +2,27 @@ package nonYewChopper;
 
 import org.powerbot.script.methods.MethodContext;
 
-import nonYewChopper.Task.Banking;
-import nonYewChopper.Task.Bonfire;
-import nonYewChopper.Task.Chopper;
-import nonYewChopper.Task.Dropper;
-import nonYewChopper.Task.LoginFailsafe;
-import nonYewChopper.Task.Searcher;
-import nonYewChopper.Utilites.EnumInter;
-import nonYewChopper.Utilites.Execute;
-import nonYewChopper.Utilites.PowerE;
-import nonYewChopper.Walker.AreaToBank;
-import nonYewChopper.Walker.AreaToTree;
-import nonYewChopper.Walker.TileToBank;
-import nonYewChopper.Walker.TileToTree;
+import nonYewChopper.enums.PowerEnum;
+import nonYewChopper.task.Banking;
+import nonYewChopper.task.Bonfire;
+import nonYewChopper.task.Chopper;
+import nonYewChopper.task.Dropper;
+import nonYewChopper.task.LoginFailsafe;
+import nonYewChopper.task.Searcher;
+import nonYewChopper.utilites.EnumInterface;
+import nonYewChopper.utilites.Executable;
+import nonYewChopper.walker.AreaToBank;
+import nonYewChopper.walker.AreaToTree;
+import nonYewChopper.walker.TileToBank;
+import nonYewChopper.walker.TileToTree;
 
 public class Box {
 	private static Box instance;
-	private final Execute bw;
-	private final Execute tw;
+	private final Executable bw;
+	private final Executable tw;
 	private final Chopper c;
 	private final Banking b;
-	private final Execute invFull;
+	private final Executable invFull;
 	private final LoginFailsafe l;
 	private final Searcher s;
 	
@@ -36,11 +36,11 @@ public class Box {
 		this.s = b.s;
 	}
 	
-	public Execute getBankWalk(){
+	public Executable getBankWalk(){
 		return bw;
 	}
 	
-	public Execute getTreeWalk(){
+	public Executable getTreeWalk(){
 		return tw;
 	}
 	
@@ -52,7 +52,7 @@ public class Box {
 		return b;
 	}
 	
-	public Execute getFullManager(){
+	public Executable getFullManager(){
 		return invFull;
 	}
 	
@@ -81,17 +81,17 @@ public class Box {
 	public static class Builder{
 		private final int f;
 		private final MethodContext c;
-		private final EnumInter e;
+		private final EnumInterface e;
 		
-		private Execute bw = null;
-		private Execute tw = null;
+		private Executable bw = null;
+		private Executable tw = null;
 		private Chopper ch = null;
 		private Banking b = null;
-		private Execute invFull = null;
+		private Executable invFull = null;
 		private LoginFailsafe l = null;
 		private Searcher s = null;
 		
-		public Builder(int f, MethodContext c, EnumInter e){
+		public Builder(int f, MethodContext c, EnumInterface e){
 			this.f = f;
 			this.c = c;
 			this.e = e;
@@ -110,7 +110,7 @@ public class Box {
 			if(amount != 0){
 				s = new Searcher(c, amount, e); return this;
 			}else{
-				s = new Searcher(c, (PowerE)e); return this;
+				s = new Searcher(c, (PowerEnum)e); return this;
 			}
 		}
 		
